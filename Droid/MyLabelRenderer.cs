@@ -16,7 +16,7 @@ namespace test.Droid
 	{
 		Context context;
 
-		float myTextSize = 20;
+		float myFontSize = 20;
 		float scaledDensity;
 
 		public MyLabelRenderer(Context context) : base(context)
@@ -29,7 +29,7 @@ namespace test.Droid
 		{
 			base.OnElementChanged(e);
 			scaledDensity = context.Resources.DisplayMetrics.ScaledDensity;
-			Element.FontSize = myTextSize / scaledDensity;
+			Element.FontSize = myFontSize;
 		}
 
 		public override void Draw(Canvas canvas)
@@ -39,7 +39,7 @@ namespace test.Droid
 			TextPaint paint = new TextPaint();
 			paint.AntiAlias = true;
 			paint.SetTypeface(Control.Typeface);
-			paint.TextSize = myTextSize;
+			paint.TextSize = myFontSize * scaledDensity;
 			paint.Color = Android.Graphics.Color.Red;
 
 			Paint.FontMetrics metrics = paint.GetFontMetrics();
@@ -47,10 +47,12 @@ namespace test.Droid
 			Rect bounds = new Rect();
 			paint.GetTextBounds(Element.Text, 0, Element.Text.Length, bounds);
 
-			canvas.DrawText(Element.Text,
-					0.5f * MeasuredWidth - bounds.Left - 0.5f * bounds.Width(),
-					0.5f * MeasuredHeight - metrics.Ascent - 0.5f * (metrics.Bottom - metrics.Top),
-					paint);
+			canvas.DrawText(
+				Element.Text,
+				0.5f * MeasuredWidth - bounds.Left - 0.5f * bounds.Width(),
+				0.5f * MeasuredHeight - metrics.Ascent - 0.5f * (metrics.Bottom - metrics.Top),
+				paint
+			);
 		}
 	}
 }
